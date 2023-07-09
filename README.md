@@ -1,5 +1,7 @@
 # Javascript-Image-Editor
-Config files for my GitHub profile.
+![image](https://github.com/UmerFarooq966/Javascript-Image-Editor/assets/94523330/1670f0bc-a4e6-4501-976c-c159410748bb)
+
+
 JavaScript-based HTML image editor with third-party **API for AI(artificial intelligence)**features like **image upscale and Background Removal**
 editors have 
 **Contrast, Hue, Brightness, Saturation, Invert, Sepia, Blur, Rotate**
