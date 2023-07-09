@@ -7,14 +7,6 @@ editors have
 crop is not exporting cropped pictures otherwise everything else works perfectly.
 
 ![image](https://github.com/UmerFarooq966/Javascript-Image-Editor/assets/94523330/eb9bd924-c39f-4f3c-b82e-c7fd2d0eeb49)
-aka
-    <div id="image-container">
-      <?php  @if(isset($imageUrl))?>
-            <img id="image-preview" src="{{ $imageUrl }}" alt="Preview Image">
-            <?php  @else?>
-            <img id="image-preview" src="" alt="Preview Image">
-            <?php  @endif ?>
-    </div>
 
 
 this is just if you want to get images from anywhere else like from other pages
