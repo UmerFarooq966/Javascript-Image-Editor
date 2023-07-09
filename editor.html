@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+        }
+
+        #image-container {
+            flex: 0 0 50%;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 500px;
+        }
+
+        .slider-container {
+            flex: 0 0 50%;
+            margin-left: 30px;
+        }
+
+        .slider {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .api-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #614caf4d;
+            color: #ffffff41;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="image-container">
+            <img id="image-preview" src="./10.jpg" alt="Preview Image">
+        </div>
+
+        <div class="slider-container">
+            <h1>Image Editor</h1>
+            <div class="form-group">
+                <label for="contrast-slider">Contrast:</label>
+                <input type="range" class="form-range slider" id="contrast-slider" min="0" max="200" value="100">
+                <span id="contrast-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="hue-slider">Hue:</label>
+                <input type="range" class="form-range slider" id="hue-slider" min="0" max="360" value="180">
+                <span id="hue-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="brightness-slider">Brightness:</label>
+                <input type="range" class="form-range slider" id="brightness-slider" min="0" max="200" value="100">
+                <span id="brightness-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="saturation-slider">Saturation:</label>
+                <input type="range" class="form-range slider" id="saturation-slider" min="0" max="200" value="100">
+                <span id="saturation-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="invert-slider">Invert:</label>
+                <input type="range" class="form-range slider" id="invert-slider" min="0" max="100" value="0">
+                <span id="invert-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="sepia-slider">Sepia:</label>
+                <input type="range" class="form-range slider" id="sepia-slider" min="0" max="100" value="0">
+                <span id="sepia-value"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="blur-slider">Blur:</label>
+                <input type="range" class="form-range slider" id="blur-slider" min="0" max="10" value="0">
+                <span id="blur-value"></span>
+            </div>
+
+            <button id="super-resolution-api-button" class="api-button">Apply Super Resolution</button>
+            <button id="download-button" class="btn btn-success">Download Edited Image</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Get the image element
+            const imagePreview = document.getElementById('image-preview');
+
+            // Get the sliders
+            const contrastSlider = document.getElementById('contrast-slider');
+            const hueSlider = document.getElementById('hue-slider');
+            const brightnessSlider = document.getElementById('brightness-slider');
+            const saturationSlider = document.getElementById('saturation-slider');
+            const invertSlider = document.getElementById('invert-slider');
+            const sepiaSlider = document.getElementById('sepia-slider');
+            const blurSlider = document.getElementById('blur-slider');
+
+            // Get the value elements
+            const contrastValue = document.getElementById('contrast-value');
+            const hueValue = document.getElementById('hue-value');
+            const brightnessValue = document.getElementById('brightness-value');
+            const saturationValue = document.getElementById('saturation-value');
+            const invertValue = document.getElementById('invert-value');
+            const sepiaValue = document.getElementById('sepia-value');
+            const blurValue = document.getElementById('blur-value');
+
+            // Update the image based on slider values
+            const updateImage = () => {
+                const contrast = contrastSlider.value;
+                const hue = hueSlider.value;
+                const brightness = brightnessSlider.value;
+                const saturation = saturationSlider.value;
+                const invert = invertSlider.value;
+                const sepia = sepiaSlider.value;
+                const blur = blurSlider.value;
+
+                contrastValue.textContent = `Contrast: ${contrast}`;
+                hueValue.textContent = `Hue: ${hue}`;
+                brightnessValue.textContent = `Brightness: ${brightness}`;
+                saturationValue.textContent = `Saturation: ${saturation}`;
+                invertValue.textContent = `Invert: ${invert}`;
+                sepiaValue.textContent = `Sepia: ${sepia}`;
+                blurValue.textContent = `Blur: ${blur}`;
+
+                imagePreview.style.filter = `contrast(${contrast}%) hue-rotate(${hue}deg) brightness(${brightness}%) saturate(${saturation}%) invert(${invert}%) sepia(${sepia}%) blur(${blur}px)`;
+            };
+
+            // Add event listeners to sliders
+            contrastSlider.addEventListener('input', updateImage);
+            hueSlider.addEventListener('input', updateImage);
+            brightnessSlider.addEventListener('input', updateImage);
+            saturationSlider.addEventListener('input', updateImage);
+            invertSlider.addEventListener('input', updateImage);
+            sepiaSlider.addEventListener('input', updateImage);
+            blurSlider.addEventListener('input', updateImage);
+
+            // Apply API for Super Resolution
+            const applySuperResolutionApi = () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = imagePreview.naturalWidth;
+                canvas.height = imagePreview.naturalHeight;
+                context.filter = imagePreview.style.filter;
+                context.drawImage(imagePreview, 0, 0);
+                canvas.toBlob(blob => {
+                    const form = new FormData();
+                    form.append('image_file', blob);
+                    form.append('upscale', 2);
+
+                    fetch('https://clipdrop-api.co/super-resolution/v1', {
+                        method: 'POST',
+                        headers: {
+                            'x-api-key': '#add your key',
+                        },
+                        body: form,
+                    })
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const img = new Image();
+                            img.src = url;
+                            document.body.appendChild(img);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }, 'image/jpeg');
+            };
+
+            // Add event listener to Super Resolution API button
+            const superResolutionApiButton = document.getElementById('super-resolution-api-button');
+            superResolutionApiButton.addEventListener('click', applySuperResolutionApi);
+
+            // Download edited image
+            const downloadButton = document.getElementById('download-button');
+            downloadButton.addEventListener('click', () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = imagePreview.naturalWidth;
+                canvas.height = imagePreview.naturalHeight;
+                context.filter = imagePreview.style.filter;
+                context.drawImage(imagePreview, 0, 0);
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/jpeg');
+                link.download = 'edited_image.jpg';
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>
